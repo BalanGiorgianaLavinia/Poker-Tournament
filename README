@@ -1,0 +1,44 @@
+/* BALAN Giorgiana - Lavinia - 311 CB */
+
+	In principal, as vrea sa mentionez ca pe checkerul local primesc 73 de puncte.
+
+	In ceea ce priveste realizarea temei, am implementat cateva functii ajutatoare pentru cele principale si anume: 
+	- AlocCel, AlocJuc, AlocMasa;
+
+	- InitLCS(functie de initializare a santinelei pentru o lista circulara- lista de jucatori de la masa);
+
+	- LeagaJuc, LeagaMasa(functii care leaga un jucator nou, respectiv o masa noua intr-o lista data ca parametru);
+
+	- muta_santi(functie necesara pentru "tura", muta santinela, deci actualizez legaturile intre santinela, primul si ultimul jucator);
+
+	- verifElimJuc, verifELimMasa(functii care verifica daca numarul de maini ale jucatorului este mai mic sau egal cu 0, respectiv, daca numarul curent de jucatori de la masa este egal cu 0, cazuri in care se elimina jucatorul de la masa sau masa din sala, realizand noile legaturi);
+
+	- verifSala(functie in care verific daca numarul de mese din sala ajunge la 0, in acest caz eliberand sala);
+
+	- scadeMaini(functie apelata in "tura", functie care parcurge lista de jucatori de la masa si scade cu 1 numarul de maini al fiecarui jucator);
+
+	- AfisareClas(functie apelata in "clasament", afiseaza in out structura curenta a salii);
+
+	- InserareOrdonata(o alta functie pentru clasament, realizeaza inserarea unui jucator dat ca parametru intr-o lista ordonata; in aceasta functie parcurg lista in care trebuie sa fac inserarea pana cand gasesc un jucator cu numarul de maini egal sau mai mic decat numarul de maini al jucatorului ce urmeaza a fi inserat si dau break pentru a ma opri pe pozitia respectiva; fac verificarea pentru cazul in care au acelasi numar de maini, in acest caz realizand comaparatia dupa nume, iar la final, legaturile si avansul in lista);
+
+	- DistrugeSala(functie in care eliberez memoria ocupata de sala cu toate alocarile).
+
+	Functiile principale sunt:
+	- print: primeste ca parametrii fisierul out in care se face afisarea si sala. Parcurg lista de mese din sala, pentru fiecare masa ii retin numele pe care il afisez, initializez lista de jucatori de la masa, o parcurg, pentru fiecare juc afisez numele si numarul de maini.
+
+	- noroc: primeste ca parametrii numele mesei , jucatorul de la masa respectiva pentru care se aplica evenimentul, gradul de noroc care reprezinta numarul de maini cu care se va realiza cresterea, fisierul de out in care afisez mesajele corespunzatoare daca nu gasesc masa corespunzatoare in sala sau jucatorul la masa respectiva si sala. Fac parcurgerea meselor si ma opresc la gasirea celei cautate. Similar, pentru jucator caruia ii si incrementez numarul de maini la gasirea sa.
+
+	- ghinion: este similara functiei noroc, cu diferenta ca la gasirea jucatorului decrementez numarul de maini cu gradul de ghinion dat, fapt ce poate duce la eliminarea jucatorului de la masa, a mesei din sala (daca jucatorul era singur la masa) si, ulterior la inchiderea salii (daca masa era singura din sala). Aceste verificari/eliminari le-am realizat prin apelul functiilor mentionate mai sus(verifElimJuc, verifElimMasa, verifSala).
+
+	- tura: primeste ca parametrii fisierul de out, sala de joc si numele mesei pe care se aplica evenimentul. Parcurg lista de mese pana o gasesc pe cea cautata si ma opresc; daca nu am gasit-o afisez mesajul corespunzator. Dupa ce am gasit masa realizez mutarea santinelei(muta_santi), decrementarea numarului de maini pentru fiecare jucator de la masa(scadeMaini) si verificarile/eliminarile jucatorului, mesei sau salii.
+
+	- tura_completa: primeste ca parametrii fisierul out si sala de joc. Aceasta functie am realizat-o prin parcurgerea tuturor meselor existente in sala si apelul functiei "tura" pentru fiecare in parte.
+
+	- clasament: primeste ca parametrii fisierul de out si sala de joc. Parcurg lista de mese din sala, iar cand o gasesc pe cea cuatata ma opresc (break). Daca nu am gasit masa respectiva in sala afisez in out mesajul corespunzator. Dupa gasirea mesei cautate initializez o noua lista, de fapt, santinela cu functia InitLCS. Parcurg lista de jucatori de la masa si pentru fiecare jucator aloc o noua celula (AlocCel) pe care, apoi, o inserez ordonat in lista nou creata(InserareOrdonata). La finalul functiei, apelez functia AfisareClas pentru a afisa clasamentul.
+
+	- inchide: primeste ca parametrii fisierul out, sala de joc si numele mesei pe care se cere aplicarea evenimentului. La fel ca la celelalte functii, parcurg lista de mese pana o gasesc pe cea cuatata, iar, in cazul in care nu am gasit masa ceruta afisez mesajul corespunzator in out. Verific daca jucatorii de la masa ce trebuie inchisa au loc in sala prin conditia ca numarul curent de jucatori de la masa sa fie mai mic sau egal cu numarul de locuri ramase libere in sala, excpetand masa in cauza si locurile sale, deci, decat diferenta dintre numarul maxim de locuri din sala (din care se scade numarul maxim de locuri de la masa ce trebuie inchisa) si numarul curent de jucatori din sala(din care se scade numarul curen de jucatori de la masa ce trebuie inchisa). In cazul in care nu se verifica conditia afisez mesajul corespunzator in out si dau return, nerealizandu-se nicio modificare in structura salii. Daca jucatorii au loc la alte mese din sala: parcurg lista de jucatori, parcurg lista de mese si verific pentru fiecare masa daca sunt locuri disponibile goale, realizand legaturile specifice, eliminarea jucatorului din lista initiala, decrementarea numarul de juc crt de la ea si incremenatrea numarului curent de juc de la masa la care se realizeaza mutarea. Dupa ce au fost mutati toti jucatorii de la masa in cauza, realizez eliberarile de memorie necesare.
+
+	In main am deschis cele 3 fisiere necesare cu ajutorul functiei fopen, am citit datele din fisierul de configuratie, am alocat memorie pentru structuri si campurile corespunzatoare lor cu ajutorul functiilor AlocMasa, AlocJuc si am realizat legaturile in liste cu functiile LeagaMasa, LeagaJuc. Apoi, am citit din fiesrul de evenimente si am depistat evenimentul cerut cu functia strcmp, la depistarea fiecarui eveniment realizand apelul functiei corespunzatoare. La finalul functiei main am apelat functia de DistrugeSala pentru a elibera memoria alocata de-a lungul programului si am inchis fisierele deschise initial penrru preluarea datelor necesare.
+
+	Atat pe checkerul local cat si pe vmchecker primesc 73 de puncte.            
+
